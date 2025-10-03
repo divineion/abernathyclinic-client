@@ -1,0 +1,20 @@
+import { configureStore } from '@reduxjs/toolkit'
+import {patientSlice} from "../features/patient/patientSlice";
+
+
+export const store = configureStore({
+    reducer: {
+        patients: patientSlice.reducer,
+    }
+})
+
+// j'exporte les types
+// le store sera de type AppStore - servira de base pour créer le type AppDispatch
+export type AppStore = typeof store;
+// le state global de type RootState --> ce qui permet de le typer dans le composant
+// qui attend un type pour accéder au state avec useSelector
+export type RootState = ReturnType<typeof store.getState>
+//le type de dispatch --> permet de fournir un type en déclarant un useDispatch
+export type AppDispatch = AppStore["dispatch"]
+
+export default store
