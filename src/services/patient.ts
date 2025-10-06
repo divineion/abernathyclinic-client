@@ -14,7 +14,7 @@ export const getPatients = async (): Promise<MinimalPatient[]> => {
     }
 };
 
-export const getPatientById = async (uuid: string): Promise<Patient | null> => {
+export const getPatientByUuid = async (uuid: string): Promise<Patient | null> => {
     try {
         const response = await fetch(`http://localhost:8080/patient/${uuid}`);
         return await response.json();
