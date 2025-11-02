@@ -20,8 +20,17 @@ export interface UpdatePatient {
     lastName: string,
     firstName: string,
     gender: string,
-    address?: Address,
-    phone?: string
+    address?: Address | null,
+    phone?: string | null
+}
+
+export interface CreatePatient {
+    lastName: string,
+    firstName: string,
+    birthDate: string,
+    gender: string,
+    address?: Address | null,
+    phone?: string | null
 }
 
 export interface Address {
