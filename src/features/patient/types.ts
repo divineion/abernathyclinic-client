@@ -5,15 +5,23 @@ export interface Patient {
     birthDate: string,
     gender: string,
     address?: Address,
-    phone?: string,
+    phone?: string
 }
 
 export interface MinimalPatient {
-    uuid: string;
-    firstName: string;
-    lastName: string;
-    birthDate: string;
-    gender: string;
+    uuid: string,
+    firstName: string,
+    lastName: string,
+    birthDate: string,
+    gender: string
+}
+
+export interface UpdatePatient {
+    lastName: string,
+    firstName: string,
+    gender: string,
+    address?: Address,
+    phone?: string
 }
 
 export interface Address {
