@@ -1,60 +1,85 @@
-import {useEffect} from "react";
+import { useEffect, useState} from "react";
 import { useSelector, useDispatch} from "react-redux";
 import type {AppDispatch, RootState} from "../../app/store";
 import type {MinimalPatient} from "./types";
 import { fetchPatients} from "./patientThunk";
 import { useNavigate } from "react-router-dom";
+import AddEditPatientForm from "./AddEditPatientForm.tsx";
 
 const Patients = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-
     const patients = useSelector((state: RootState) => state.patients.patients);
+
+    const [onEdit, setOnEdit] = useState(false);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect( () => {
        // appeler getPatients() via  fetchPatients() et dispatcher la promesse
         dispatch(fetchPatients());
     }, [dispatch])
 
-    const handleClick = (uuid: string) => {
+    const handleShowPatientClick = (uuid: string) => {
         navigate(`/patient/${uuid}`);
     };
 
-    return (
-        <div className="container mt-4">
-            <h2>Liste des patients</h2>
+    const handleAddPatientClick = () => {
+        setOnEdit(false)
+        setShowForm(true);
+    }
 
-            <table className="table table-striped mt-3">
-                <thead>
-                <tr>
-                    <th>Prénom</th>
-                    <th>Nom</th>
-                    <th>Date de naissance</th>
-                    <th>Genre</th>
-                    <th>Détails</th>
-                </tr>
-                </thead>
-                <tbody>
-                {patients.map((patient: MinimalPatient) => (
-                    <tr key={patient.uuid}>
-                        <td>{patient.firstName}</td>
-                        <td>{patient.lastName}</td>
-                        <td>{patient.birthDate}</td>
-                        <td>{patient.gender}</td>
-                        <td>
-                            <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => handleClick(patient.uuid)}
-                            >
-                                Voir
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
+    const handleBackButtonClick = () => {
+        setShowForm(false)
+    }
+
+    return (
+        <>
+            {!showForm &&
+                <div className="container mt-4">
+                    <h2>Liste des patients</h2>
+                    <div>
+                        <button
+                            className={"add-patient-button"}
+                            title={"Ajouter un patient"}
+                            onClick={handleAddPatientClick}
+                        >+</button>
+                    </div>
+                    <table className="table table-striped mt-3">
+                        <thead>
+                        <tr>
+                            <th>Prénom</th>
+                            <th>Nom</th>
+                            <th>Date de naissance</th>
+                            <th>Genre</th>
+                            <th>Détails</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {patients.map((patient: MinimalPatient) => (
+                            <tr key={patient.uuid}>
+                                <td>{patient.firstName}</td>
+                                <td>{patient.lastName}</td>
+                                <td>{patient.birthDate}</td>
+                                <td>{patient.gender}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleShowPatientClick(patient.uuid)}
+                                    >
+                                        Voir
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            }
+            {showForm &&
+                <AddEditPatientForm onEdit={onEdit} setOnEdit={setOnEdit} handleBackButtonClick={handleBackButtonClick}/>
+            }
+        </>
     );
 };
 
