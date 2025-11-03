@@ -1,25 +1,24 @@
 import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
-import type {Address} from "./types.ts";
-import {updatePatientDetails} from "./patientThunk.ts";
+import type {Address, CreatePatient, UpdatePatient} from "./types.ts";
+import {addPatient, updatePatientDetails} from "./patientThunk.ts";
 
 const AddEditPatientForm = (
-    {onEdit, setOnEdit}: AddEditPatientFormProps // on destructure les props
+    {onEdit, setOnEdit, handleBackButtonClick}: AddEditPatientFormProps // on destructure les props
 ) => {
     const dispatch = useDispatch<AppDispatch>();
-    // initialement vides (onEdit = false)
+
     const [lastName, setLastName] = useState("")
     const [firstName, setFirstName] = useState("")
     const [gender, setGender] = useState("")
     const [birthDate, setBirthDate] = useState("")
-    const [address, setAddress] = useState<Address>({streetNumber: "", street: "", zip: "", city: ""})
-    const [phone, setPhone] = useState("")
+    // nullable pour pouvoir envoyer des null au backend
+    const [address, setAddress] = useState<Address | null>(null)
+    const [phone, setPhone] = useState<string | null>(null)
 
-    // on récup le patient depuis le store redux
     const patient = useSelector((state: RootState) => state.patients?.selectedPatient)
 
-    // si mode édition, mise à jour du state local avec les données du patient
     useEffect(() => {
         if (onEdit && patient) {
             setLastName(patient.lastName)
@@ -32,21 +31,15 @@ const AddEditPatientForm = (
     }, [onEdit, patient]);
 
     const handleSubmitButtonClick = () => {
-        setOnEdit(false);
-        if (patient) {
-            const updatedPatientData = {
-                lastName,
-                firstName,
-                gender,
-                address,
-                phone
-            };
-            dispatch(updatePatientDetails(patient.uuid, updatedPatientData))
-        }
-    }
+        if (onEdit && patient) {
+            const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
+            dispatch(updatePatientDetails(patient.uuid, patientData))
+            setOnEdit(false);
 
-    const handleBackButtonClick = () => {
-        setOnEdit(false);
+            return
+        }
+        const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
+        dispatch(addPatient(addPatientData))
     }
 
     const handleLastNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,42 +50,56 @@ const AddEditPatientForm = (
         setFirstName(e.target.value)
     }
 
-    const handleStreetNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setAddress({streetNumber: e.target.value, street: address.street, zip: address.zip, city: address.city})
-    }
-
-    const handleZipInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setAddress({streetNumber: address.streetNumber, street: address.street, zip: e.target.value, city: address.city})
-    }
-
-    const handleCityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setAddress({streetNumber: address.streetNumber, street: address.street, zip: address.zip, city: e.target.value})
-    }
-
-    const handleStreetInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setAddress({streetNumber: address.streetNumber, street: e.target.value, zip: address.zip, city: address.city})
+    const handleAddressChange = (field: keyof Address, value: string) => {
+        // si address == null, créer champ vides, puis màj des champs
+        setAddress({city: "", street: "", streetNumber: "", zip: "", ...address, [field]: value });
     }
 
     const handlePhoneInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setPhone(e.target.value)
     }
 
+    const handleBirthDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setBirthDate(e.target.value)
+    }
+
     return (
         <>
             <form>
                 <fieldset>
+                    <label htmlFor={"patient-lastName"}>Nom </label>
                     <input id="patient-lastName" type="text" value={lastName} onChange={handleLastNameInputChange}/>
-                    <input id="patient-firstName" type="text" value={firstName} onChange={handleFirstNameInputChange} />
-                    <input id="patient-gender" type="text" value={gender} onChange={(e) => setGender(e.target.value)}/>
-                    <input id="patient-birthDate" type="text" value={birthDate} disabled={true}/>
+
+                    <label htmlFor={"patient-firstName"}>Prénom </label>
+                    <input id="patient-firstName" type="text" value={firstName} onChange={handleFirstNameInputChange}/>
+
+                    <label htmlFor={"patient-gender"}>Genre</label>
+                    <input id="patient-gender" type="text" value={gender}
+                               onChange={(e) => setGender(e.target.value)}/>
+                    <label htmlFor={"patient-birthDate"}>Date de naissance </label>
+                    <input id="patient-birthDate" type="date" value={birthDate} onChange={handleBirthDateInputChange}
+                           disabled={onEdit}/>
                 </fieldset>
 
                 <fieldset>
-                    <input id={"patient-address-streetNumber"} type="text" value={address?.streetNumber} onChange={handleStreetNumberInputChange}/>
-                    <input id={"patient-address-street"} type="text" value={address?.street} onChange={handleStreetInputChange}/>
-                    <input id={"patient-address-zip"} type="text" value={address?.zip} onChange={handleZipInputChange}/>
-                    <input id={"patient-address-city"} type="text" value={address?.city} onChange={handleCityInputChange}/>
-                    <input id={"patient-phone"} type="text" value={phone} onChange={handlePhoneInputChange}/>
+                    <label htmlFor={"patient-address-streetNumber"}>N°</label>
+                    <input id={"patient-address-streetNumber"} type="text" value={address?.streetNumber}
+                           onChange={(e) => handleAddressChange('streetNumber', e.target.value)}/>
+
+                    <label htmlFor={"patient-address-street"}>Rue</label>
+                    <input id={"patient-address-street"} type="text" value={address?.street}
+                           onChange={(e) => handleAddressChange('street', e.target.value)}/>
+
+                    <label htmlFor={"patient-address-zip"}>Code postal</label>
+                    <input id={"patient-address-zip"} type="text" value={address?.zip}
+                           onChange={(e) => handleAddressChange('zip', e.target.value)}/>
+
+                    <label htmlFor={"patient-address-city"}>Ville</label>
+                    <input id={"patient-address-city"} type="text" value={address?.city}
+                           onChange={(e) => handleAddressChange('city', e.target.value)}/>
+
+                    <label htmlFor={"patient-phone"}>Téléphone</label>
+                    <input id={"patient-phone"} type="text" value={phone ?? ""} onChange={handlePhoneInputChange}/>
                 </fieldset>
             </form>
 
@@ -105,6 +112,7 @@ const AddEditPatientForm = (
 type AddEditPatientFormProps = {
     onEdit: boolean;
     setOnEdit: (value: boolean) => void;
+    handleBackButtonClick: () => void;
 }
 
 export default AddEditPatientForm;
