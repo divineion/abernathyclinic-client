@@ -12,17 +12,22 @@ const Patient = () => {
     const patient = useSelector((state: RootState) => state.patients.selectedPatient);
     const [onEdit, setOnEdit] = useState(false);
 
+    const handleEditButtonClick = () => {
+        setOnEdit(true)
+    }
+
+    const handleBackButtonClick = () => {
+        setOnEdit(false);
+    }
     useEffect(() => {
         if (uuid) {
             dispatch(fetchPatientByUuid(uuid));
         }
     }, [dispatch, uuid]);
 
-    if (!patient) return <p>Chargement</p>;
-
     return (
         <>
-            {!onEdit && (
+            {patient && !onEdit && (
                 <div className="container mt-4">
                     <h2>Fiche patient</h2>
                     <p><strong>Prénom:</strong> {patient.firstName}</p>
@@ -32,7 +37,7 @@ const Patient = () => {
                     {patient.phone && <p><strong>Téléphone:</strong> {patient.phone}</p>}
                     {patient.address && (
                         <p>
-                            <strong>Adresse:</strong> {patient.address.streetNumber} {patient.address.street}, {patient.address.city}, {patient.address.zip}
+                            <strong>Adresse:</strong> {patient.address.streetNumber} {patient.address.street} {patient.address.zip} {patient.address.city}
                         </p>
                     )}
 
@@ -46,7 +51,7 @@ const Patient = () => {
 
                         <button
                             className="btn btn-primary"
-                            onClick={() => setOnEdit(true)}
+                            onClick={handleEditButtonClick}
                         >
                             Modifier le patient
                         </button>
@@ -57,7 +62,7 @@ const Patient = () => {
                 <AddEditPatientForm
                     onEdit={onEdit}
                     setOnEdit={setOnEdit}
-                />
+                    handleBackButtonClick={handleBackButtonClick}/>
             )}
         </>
     );
