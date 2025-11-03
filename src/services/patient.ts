@@ -1,4 +1,4 @@
-import type {MinimalPatient, Patient, UpdatePatient} from "../features/patient/types";
+import type {CreatePatient, MinimalPatient, Patient, UpdatePatient} from "../features/patient/types";
 import axios, {type AxiosResponse, isAxiosError} from "axios";
 import {axiosConfig} from "./axiosConfig.ts";
 
@@ -40,5 +40,23 @@ export  const updatePatient = async (uuid: string, patient: UpdatePatient): Prom
         }
 
         throw new Error('Erreur inconnue lors de la mise à jour')
+    }
+}
+
+export  const createPatient = async (patient: CreatePatient): Promise<Patient | null> => {
+    try {
+        const response: AxiosResponse = await axios.post(
+            "http://localhost:8080/patient",
+            patient,
+            axiosConfig()
+        )
+
+        return response.data;
+    } catch (error : unknown) {
+        if (isAxiosError(error)) {
+            throw new Error(error.message)
+        }
+
+        throw new Error("Erreur inconnue lors de l'ajout")
     }
 }
