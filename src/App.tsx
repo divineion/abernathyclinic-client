@@ -4,13 +4,14 @@ import Patients from "./features/patient/Patients";
 import Patient from "./features/patient/Patient.tsx";
 import Login from "./features/login/Login.tsx";
 import {useEffect} from "react";
-import type {AppDispatch} from "./app/store.ts";
-import {useDispatch} from "react-redux";
-import {setIsLoggedIn, setToken} from "./features/login/userSlice.ts";
+import type {AppDispatch, RootState} from "./app/store.ts";
+import {useDispatch, useSelector} from "react-redux";
 import {setIsLoggedIn, setRole, setToken} from "./features/login/userSlice.ts";
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>()
+
+    const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
 
     useEffect(() => {
         const token = localStorage.getItem("authToken");
@@ -26,9 +27,9 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Login/>}/>
-                <Route path="/patients" element={<Patients/>}/>
-                <Route path="/patient/:uuid" element={<Patient />} />
+                <Route path="/" element={ isLoggedIn ? <Patients/> : <Login/>}/>
+                <Route path="/patients" element={isLoggedIn ? <Patients/> : <Login/>}/>
+                <Route path="/patient/:uuid" element={isLoggedIn ? <Patient /> : <Login/>} />
             </Routes>
         </BrowserRouter>
     );
