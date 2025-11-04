@@ -32,6 +32,8 @@ const Patients = () => {
 
     const handleBackButtonClick = () => {
         setShowForm(false)
+        // recharger la liste juste après fermeture du form
+        dispatch(fetchPatients())
     }
 
     return (

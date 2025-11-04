@@ -30,16 +30,17 @@ const AddEditPatientForm = (
         }
     }, [onEdit, patient]);
 
-    const handleSubmitButtonClick = () => {
+    const handleSubmitButtonClick = async () => {
         if (onEdit && patient) {
             const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
-            dispatch(updatePatientDetails(patient.uuid, patientData))
+            await dispatch(updatePatientDetails(patient.uuid, patientData))
             setOnEdit(false);
 
             return
         }
         const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
-        dispatch(addPatient(addPatientData))
+        await dispatch(addPatient(addPatientData))
+        handleBackButtonClick()
     }
 
     const handleLastNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
