@@ -7,16 +7,20 @@ import {useEffect} from "react";
 import type {AppDispatch} from "./app/store.ts";
 import {useDispatch} from "react-redux";
 import {setIsLoggedIn, setToken} from "./features/login/userSlice.ts";
+import {setIsLoggedIn, setRole, setToken} from "./features/login/userSlice.ts";
 
-// je définis le routing url => component
 const App = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     useEffect(() => {
         const token = localStorage.getItem("authToken");
+        const role = localStorage.getItem("role");
         if (token) {
-            dispatch(setToken(token));
-            dispatch(setIsLoggedIn(true));
+            dispatch(setToken(token))
+            dispatch(setIsLoggedIn(true))
+            if (role) {
+                dispatch(setRole(role))
+            }
         }
     }, [dispatch]);
     return (
