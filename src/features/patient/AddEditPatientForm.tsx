@@ -67,7 +67,7 @@ const AddEditPatientForm = (
 
     return (
         <>
-            <form>
+            <form className={"container"}>
                 <fieldset>
                     <label htmlFor={"patient-lastName"}>Nom </label>
                     <input id="patient-lastName" type="text" value={lastName} onChange={handleLastNameInputChange}/>

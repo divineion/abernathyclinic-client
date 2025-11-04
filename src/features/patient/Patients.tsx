@@ -53,7 +53,7 @@ const Patients = () => {
                             value={"+"}
                         />
                     </div>
-                    <table className="table table-striped mt-3">
+                    <table className="table table-striped table-dark mt-3">
                         <thead>
                         <tr>
                             <th>Prénom</th>
@@ -72,7 +72,7 @@ const Patients = () => {
                                 <td>{patient.gender}</td>
                                 <td>
                                     <button
-                                        className="btn btn-primary btn-sm"
+                                        className="btn btn-sm"
                                         onClick={() => handleShowPatientClick(patient.uuid)}
                                     >
                                         Voir
