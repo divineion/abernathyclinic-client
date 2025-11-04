@@ -3,6 +3,7 @@ import type {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
 import type {Address, CreatePatient, UpdatePatient} from "./types.ts";
 import {addPatient, updatePatientDetails} from "./patientThunk.ts";
+import Button from "../../common/components/Button.tsx";
 
 const AddEditPatientForm = (
     {onEdit, setOnEdit, handleBackButtonClick}: AddEditPatientFormProps // on destructure les props
@@ -104,8 +105,9 @@ const AddEditPatientForm = (
                 </fieldset>
             </form>
 
-            <button className="btn btn-secondary me-2" type="button" onClick={handleSubmitButtonClick}>Valider</button>
-            <button className="btn btn-secondary me-2" type="button" onClick={handleBackButtonClick}>Retour</button>
+            <Button value={"enregistrer"}  title={"Ajouter"} className="btn btn-secondary me-2" ariaLabel={"Enregistrer"} handleClick={handleSubmitButtonClick}/>
+            <Button className="btn me-2" ariaLabel={"retour"} handleClick={handleBackButtonClick} value={"Retour"}
+                    title={"Retour"}/>
         </>
     )
 }
