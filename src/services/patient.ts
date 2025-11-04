@@ -1,14 +1,13 @@
 import type {CreatePatient, MinimalPatient, Patient, UpdatePatient} from "../features/patient/types";
-import axios, {type AxiosResponse, isAxiosError} from "axios";
-import {axiosConfig} from "./axiosConfig.ts";
+import api from "./axiosConfig.ts";
+import {type AxiosResponse, isAxiosError} from "axios";
 
 // COUCHE SERVICE
 // Resppnsabilité = appels à l'API purs
-
 export const getPatients = async (): Promise<MinimalPatient[]> => {
     try {
-        const response = await fetch('http://localhost:8080/patients');
-        return await response.json();
+        const response = await api.get('http://localhost:8080/patients');
+        return await response.data;
     } catch (error: unknown) {
         if (error instanceof Error) console.error(error.message);
         return [];
@@ -17,8 +16,8 @@ export const getPatients = async (): Promise<MinimalPatient[]> => {
 
 export const getPatientByUuid = async (uuid: string): Promise<Patient | null> => {
     try {
-        const response = await fetch(`http://localhost:8080/patient/${uuid}`);
-        return await response.json();
+        const response = await api(`http://localhost:8080/patient/${uuid}`);
+        return await response.data;
     } catch (error: unknown) {
         if (error instanceof Error) console.error(error.message);
         return null;
@@ -27,11 +26,9 @@ export const getPatientByUuid = async (uuid: string): Promise<Patient | null> =>
 
 export  const updatePatient = async (uuid: string, patient: UpdatePatient): Promise<Patient | null> => {
     try {
-        const response: AxiosResponse = await axios.patch(
+        const response: AxiosResponse = await api.patch(
             `http://localhost:8080/patient/${uuid}/update`,
-            patient,
-            axiosConfig()
-        )
+            patient)
 
         return response.data;
     } catch (error : unknown) {
@@ -45,11 +42,9 @@ export  const updatePatient = async (uuid: string, patient: UpdatePatient): Prom
 
 export  const createPatient = async (patient: CreatePatient): Promise<Patient | null> => {
     try {
-        const response: AxiosResponse = await axios.post(
+        const response: AxiosResponse = await api.post(
             "http://localhost:8080/patient",
-            patient,
-            axiosConfig()
-        )
+            patient)
 
         return response.data;
     } catch (error : unknown) {

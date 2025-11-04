@@ -5,6 +5,7 @@ import type {MinimalPatient} from "./types";
 import { fetchPatients} from "./patientThunk";
 import { useNavigate } from "react-router-dom";
 import AddEditPatientForm from "./AddEditPatientForm.tsx";
+import Navbar from "../../common/components/Navbar.tsx";
 
 const Patients = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -35,6 +36,8 @@ const Patients = () => {
 
     return (
         <>
+            <Navbar></Navbar>
+
             {!showForm &&
                 <div className="container mt-4">
                     <h2>Liste des patients</h2>

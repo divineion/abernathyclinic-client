@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {patientSlice} from "../features/patient/patientSlice";
+import {userSlice} from "../features/login/userSlice.ts";
 
 
 export const store = configureStore({
     reducer: {
         patients: patientSlice.reducer,
+        user: userSlice.reducer
     }
 })
 

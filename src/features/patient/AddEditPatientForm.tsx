@@ -14,8 +14,8 @@ const AddEditPatientForm = (
     const [gender, setGender] = useState("")
     const [birthDate, setBirthDate] = useState("")
     // nullable pour pouvoir envoyer des null au backend
-    const [address, setAddress] = useState<Address | null>(null)
-    const [phone, setPhone] = useState<string | null>(null)
+    const [address, setAddress] = useState<Address | null>({streetNumber: "", street: "", zip: "", city: ""})
+    const [phone, setPhone] = useState<string | null>("")
 
     const patient = useSelector((state: RootState) => state.patients?.selectedPatient)
 
