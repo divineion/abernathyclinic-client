@@ -10,15 +10,9 @@ html, body {
 }
 
 :root {
-    line-height: 1.5;
-
     color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    --component-bg-color-dark: #212529;
+    --component-text-color-dark: rgb(149, 146, 146);
 }
 
 #root {
@@ -28,11 +22,13 @@ html, body {
 }
 
 .container {
+    color: var(--component-text-color-dark);
     border: solid rgba(43, 46, 97, 0.78) 1px;
     width: 100%;
     padding: 1rem;
     margin: 2rem;
     box-shadow: rgba(12, 13, 51, 0.22) 6px 6px 2px;
+    background: var(--component-bg-color-dark);
 }
 
 a {
