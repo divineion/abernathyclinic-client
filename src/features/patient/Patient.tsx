@@ -33,7 +33,7 @@ const Patient = () => {
                     <h2>Fiche patient</h2>
                     <p><strong>Prénom:</strong> {patient.firstName}</p>
                     <p><strong>Nom:</strong> {patient.lastName}</p>
-                    <p><strong>Date de naissance:</strong> {patient.birthDate}</p>
+                    <p><strong>Date de naissance:</strong> {new Date(patient.birthDate).toLocaleDateString()}</p>
                     <p><strong>Genre:</strong> {patient.gender}</p>
                     {patient.phone && <p><strong>Téléphone:</strong> {patient.phone}</p>}
                     {patient.address && (

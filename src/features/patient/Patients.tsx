@@ -68,7 +68,7 @@ const Patients = () => {
                             <tr key={patient.uuid}>
                                 <td>{patient.firstName}</td>
                                 <td>{patient.lastName}</td>
-                                <td>{patient.birthDate}</td>
+                                <td>{new Date(patient.birthDate).toLocaleDateString()}</td>
                                 <td>{patient.gender}</td>
                                 <td>
                                     <button
