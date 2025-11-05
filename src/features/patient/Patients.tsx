@@ -71,12 +71,13 @@ const Patients = () => {
                                 <td>{new Date(patient.birthDate).toLocaleDateString()}</td>
                                 <td>{patient.gender}</td>
                                 <td>
-                                    <button
+                                    <Button
                                         className="btn btn-sm"
-                                        onClick={() => handleShowPatientClick(patient.uuid)}
-                                    >
-                                        Voir
-                                    </button>
+                                        value={"Voir"}
+                                        handleClick={() => handleShowPatientClick(patient.uuid)}
+                                        ariaLabel={"voir le patient"}
+                                        title={`voir le patient ${patient.lastName}`}
+                                    />
                                 </td>
                             </tr>
                         ))}
