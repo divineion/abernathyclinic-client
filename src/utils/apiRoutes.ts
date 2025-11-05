@@ -6,3 +6,9 @@ export const CREATE_PATIENT_ROUTE = "http://localhost:8080/patient";
 
 // user
 export const GET_USER_INFO_ROUTE = "/user";
+
+// notes
+export const GET_NOTES_ROUTE = (uuid: string) => `http://localhost:8080/notes/patient/${uuid}`;
+export const GET_NOTE_ROUTE = (id: string) => `http://localhost:8080/note/${id}`;
+export const UPDATE_NOTE_ROUTE = (id: string) => `http://localhost:8080/note/${id}/update`;
+export const CREATE_NOTE_ROUTE = (patientUuid: string) => `http://localhost:8080/${patientUuid}`;
