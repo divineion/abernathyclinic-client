@@ -26,11 +26,15 @@ const LoginForm = (
 
     return (
         <form className={"flex flex-column"} onSubmit={handleFormSubmit}>
-            <label htmlFor="username">Nom d'utilisateur</label>
-            <input id={"username"} value={username} type="text" onChange={handleUsernameInputChange} autoComplete={"on"} />
+            <div className={"d-flex flex-column"}>
+                <label htmlFor="username">Nom d'utilisateur</label>
+                <input id={"username"} value={username} type="text" onChange={handleUsernameInputChange} autoComplete={"on"} />
+            </div>
 
-            <label htmlFor="password">Mot de passe</label>
-            <input id={"password"} value={password} type="password" onChange={handlePasswordInputChange}/>
+            <div className={"d-flex flex-column"}>
+                <label htmlFor="password">Mot de passe</label>
+                <input id={"password"} value={password} type="password" onChange={handlePasswordInputChange}/>
+            </div>
 
             <input type={"submit"}/>
         </form>

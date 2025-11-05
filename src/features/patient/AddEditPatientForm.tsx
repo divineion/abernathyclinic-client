@@ -3,6 +3,7 @@ import type {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
 import type {Address, CreatePatient, UpdatePatient} from "./types.ts";
 import {addPatient, updatePatientDetails} from "./patientThunk.ts";
+import Button from "../../common/components/Button.tsx";
 
 const AddEditPatientForm = (
     {onEdit, setOnEdit, handleBackButtonClick}: AddEditPatientFormProps // on destructure les props
@@ -30,16 +31,17 @@ const AddEditPatientForm = (
         }
     }, [onEdit, patient]);
 
-    const handleSubmitButtonClick = () => {
+    const handleSubmitButtonClick = async () => {
         if (onEdit && patient) {
             const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
-            dispatch(updatePatientDetails(patient.uuid, patientData))
+            await dispatch(updatePatientDetails(patient.uuid, patientData))
             setOnEdit(false);
 
             return
         }
         const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
-        dispatch(addPatient(addPatientData))
+        await dispatch(addPatient(addPatientData))
+        handleBackButtonClick()
     }
 
     const handleLastNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +67,7 @@ const AddEditPatientForm = (
 
     return (
         <>
-            <form>
+            <form className={"container"}>
                 <fieldset>
                     <label htmlFor={"patient-lastName"}>Nom </label>
                     <input id="patient-lastName" type="text" value={lastName} onChange={handleLastNameInputChange}/>
@@ -103,8 +105,9 @@ const AddEditPatientForm = (
                 </fieldset>
             </form>
 
-            <button className="btn btn-secondary me-2" type="button" onClick={handleSubmitButtonClick}>Valider</button>
-            <button className="btn btn-secondary me-2" type="button" onClick={handleBackButtonClick}>Retour</button>
+            <Button value={"enregistrer"}  title={"Ajouter"} className="btn btn-secondary me-2" ariaLabel={"Enregistrer"} handleClick={handleSubmitButtonClick}/>
+            <Button className="btn me-2" ariaLabel={"retour"} handleClick={handleBackButtonClick} value={"Retour"}
+                    title={"Retour"}/>
         </>
     )
 }

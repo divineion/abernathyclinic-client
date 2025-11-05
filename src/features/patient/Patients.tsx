@@ -6,6 +6,7 @@ import { fetchPatients} from "./patientThunk";
 import { useNavigate } from "react-router-dom";
 import AddEditPatientForm from "./AddEditPatientForm.tsx";
 import Navbar from "../../common/components/Navbar.tsx";
+import Button from "../../common/components/Button.tsx";
 
 const Patients = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -32,6 +33,8 @@ const Patients = () => {
 
     const handleBackButtonClick = () => {
         setShowForm(false)
+        // recharger la liste juste après fermeture du form
+        dispatch(fetchPatients())
     }
 
     return (
@@ -42,13 +45,15 @@ const Patients = () => {
                 <div className="container mt-4">
                     <h2>Liste des patients</h2>
                     <div>
-                        <button
-                            className={"add-patient-button"}
+                        <Button
+                            className={"btn add-patient-button"}
                             title={"Ajouter un patient"}
-                            onClick={handleAddPatientClick}
-                        >+</button>
+                            handleClick={handleAddPatientClick}
+                            ariaLabel={"ajouter un patient"}
+                            value={"+"}
+                        />
                     </div>
-                    <table className="table table-striped mt-3">
+                    <table className="table table-striped table-dark mt-3">
                         <thead>
                         <tr>
                             <th>Prénom</th>
@@ -63,15 +68,16 @@ const Patients = () => {
                             <tr key={patient.uuid}>
                                 <td>{patient.firstName}</td>
                                 <td>{patient.lastName}</td>
-                                <td>{patient.birthDate}</td>
+                                <td>{new Date(patient.birthDate).toLocaleDateString()}</td>
                                 <td>{patient.gender}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-primary btn-sm"
-                                        onClick={() => handleShowPatientClick(patient.uuid)}
-                                    >
-                                        Voir
-                                    </button>
+                                    <Button
+                                        className="btn btn-sm"
+                                        value={"Voir"}
+                                        handleClick={() => handleShowPatientClick(patient.uuid)}
+                                        ariaLabel={"voir le patient"}
+                                        title={`voir le patient ${patient.lastName}`}
+                                    />
                                 </td>
                             </tr>
                         ))}
