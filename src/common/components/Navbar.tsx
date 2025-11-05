@@ -15,7 +15,7 @@ const Navbar = () => {
         <>
             <nav className={"container"}>
                 <Button handleClick={handleLogoutButtonClick} value={"x"} ariaLabel={"déconnexion"}
-                        title={"déconnexion"} className={"btn btn-primary"}/>
+                        title={"déconnexion"} className={"btn"}/>
             </nav>
         </>
     )
