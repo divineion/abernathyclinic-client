@@ -67,42 +67,54 @@ const AddEditPatientForm = (
 
     return (
         <>
-            <form className={"container"}>
-                <fieldset>
-                    <label htmlFor={"patient-lastName"}>Nom </label>
-                    <input id="patient-lastName" type="text" value={lastName} onChange={handleLastNameInputChange}/>
+            <form className={"section-limiter"}>
+                <div className={"patient-details grid-container"}>
+                        <div className={"grid-item"}>
+                            <label className={"label"} htmlFor={"patient-lastName"}>Nom </label>
+                            <input className={"value"} id="patient-lastName" type="text" value={lastName}
+                                   onChange={handleLastNameInputChange}/>
+                        </div>
 
-                    <label htmlFor={"patient-firstName"}>Prénom </label>
-                    <input id="patient-firstName" type="text" value={firstName} onChange={handleFirstNameInputChange}/>
+                        <div className={"grid-item"}><label htmlFor={"patient-firstName"}>Prénom </label>
+                            <input id="patient-firstName" type="text" value={firstName} onChange={handleFirstNameInputChange}/>
+                        </div>
+                        <div className={"grid-item"}>
+                            <label htmlFor={"patient-gender"}>Genre</label>
+                            <input id="patient-gender" type="text" value={gender}
+                                   onChange={(e) => setGender(e.target.value)}/>
+                        </div>
+                        <div className={"grid-item"}>
+                            <label htmlFor={"patient-birthDate"}>Date de naissance </label>
+                            <input id="patient-birthDate" type="date" value={birthDate} onChange={handleBirthDateInputChange}
+                                   disabled={onEdit}/>
+                        </div>
+                </div>
 
-                    <label htmlFor={"patient-gender"}>Genre</label>
-                    <input id="patient-gender" type="text" value={gender}
-                               onChange={(e) => setGender(e.target.value)}/>
-                    <label htmlFor={"patient-birthDate"}>Date de naissance </label>
-                    <input id="patient-birthDate" type="date" value={birthDate} onChange={handleBirthDateInputChange}
-                           disabled={onEdit}/>
-                </fieldset>
+                <div className={"patient-contact grid-container"}>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-address-streetNumber"}>N°</label>
+                        <input id={"patient-address-streetNumber"} type="text" value={address?.streetNumber}
+                               onChange={(e) => handleAddressChange('streetNumber', e.target.value)}/>
+                    </div>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-address-street"}>Rue</label>
+                        <input id={"patient-address-street"} type="text" value={address?.street}
+                               onChange={(e) => handleAddressChange('street', e.target.value)}/>
+                    </div>
+                    <div className={"grid-item"}><label htmlFor={"patient-address-zip"}>Code postal</label>
+                        <input id={"patient-address-zip"} type="text" value={address?.zip}
+                               onChange={(e) => handleAddressChange('zip', e.target.value)}/></div>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-address-city"}>Ville</label>
+                        <input id={"patient-address-city"} type="text" value={address?.city}
+                               onChange={(e) => handleAddressChange('city', e.target.value)}/>
 
-                <fieldset>
-                    <label htmlFor={"patient-address-streetNumber"}>N°</label>
-                    <input id={"patient-address-streetNumber"} type="text" value={address?.streetNumber}
-                           onChange={(e) => handleAddressChange('streetNumber', e.target.value)}/>
-
-                    <label htmlFor={"patient-address-street"}>Rue</label>
-                    <input id={"patient-address-street"} type="text" value={address?.street}
-                           onChange={(e) => handleAddressChange('street', e.target.value)}/>
-
-                    <label htmlFor={"patient-address-zip"}>Code postal</label>
-                    <input id={"patient-address-zip"} type="text" value={address?.zip}
-                           onChange={(e) => handleAddressChange('zip', e.target.value)}/>
-
-                    <label htmlFor={"patient-address-city"}>Ville</label>
-                    <input id={"patient-address-city"} type="text" value={address?.city}
-                           onChange={(e) => handleAddressChange('city', e.target.value)}/>
-
-                    <label htmlFor={"patient-phone"}>Téléphone</label>
-                    <input id={"patient-phone"} type="text" value={phone ?? ""} onChange={handlePhoneInputChange}/>
-                </fieldset>
+                    </div>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-phone"}>Téléphone</label>
+                        <input id={"patient-phone"} type="text" value={phone ?? ""} onChange={handlePhoneInputChange}/>
+                    </div>
+                </div>
             </form>
 
             <Button value={"enregistrer"}  title={"Ajouter"} className="btn btn-secondary me-2" ariaLabel={"Enregistrer"} handleClick={handleSubmitButtonClick}/>
