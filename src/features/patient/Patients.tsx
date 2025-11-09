@@ -1,26 +1,55 @@
-import { useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { useSelector, useDispatch} from "react-redux";
 import type {AppDispatch, RootState} from "../../app/store";
 import type {MinimalPatient} from "./types";
 import { fetchPatients} from "./patientThunk";
 import { useNavigate } from "react-router-dom";
-import AddEditPatientForm from "./AddEditPatientForm.tsx";
-import Navbar from "../../common/components/Navbar.tsx";
-import Button from "../../common/components/Button.tsx";
+import AddEditPatientForm from "./AddEditPatientForm.tsx";import Button from "../../common/components/Button.tsx";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import {getNotesByDoctor} from "../note/noteThunk.ts";
+import {setFilter} from "../note/noteSlice.ts";
 
 const Patients = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const patients = useSelector((state: RootState) => state.patients.patients);
+    const user = useSelector((state: RootState) => state.user)
+    const patients = useSelector((state: RootState) => state.patients.patients)
+    const filter = useSelector((state: RootState) => state.notes.filter)
+    const filteredNotes = useSelector((state:RootState) => state.notes.filteredNotes)
+
+    const filterBox = useRef<HTMLInputElement>(null)
+
+    const [filteredPatients, setFilteredPatients] = useState<string[]>([])
 
     const [onEdit, setOnEdit] = useState(false);
     const [showForm, setShowForm] = useState(false);
 
-    useEffect( () => {
-       // appeler getPatients() via  fetchPatients() et dispatcher la promesse
-        dispatch(fetchPatients());
-    }, [dispatch])
+    const handleToggleFilterBoxClick = async () => {
+        const newFilterState = !filter;
+        dispatch(setFilter(newFilterState))
+
+        if (newFilterState) {
+            if (filteredNotes.length == 0) {
+                // récupérer les notes du médecin
+                await dispatch(getNotesByDoctor(user.id))
+                // récupérer dans un tableau les patientUUID qui apparaissent dans les notes
+                const patientsByDoctorId: string[] = [];
+                filteredNotes.map((item) => patientsByDoctorId.push(item.patientUuid))
+
+                setFilter(true)
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (filter && filteredNotes.length > 0) {
+            const patientsByDoctorId = filteredNotes.map(n => n.patientUuid);
+            setFilteredPatients(patientsByDoctorId);
+        }
+    }, [filteredNotes, filter]);
 
     const handleShowPatientClick = (uuid: string) => {
         navigate(`/patient/${uuid}`);
@@ -33,9 +62,18 @@ const Patients = () => {
 
     const handleBackButtonClick = () => {
         setShowForm(false)
+        setOnEdit(false)
         // recharger la liste juste après fermeture du form
         dispatch(fetchPatients())
     }
+
+    useEffect( () => {
+        // appeler getPatients() via  fetchPatients() et dispatcher la promesse
+        if (patients.length == 0) {
+            dispatch(fetchPatients());
+        }
+
+    }, [dispatch])
 
     return (
         <div className={"section-limiter"}>
@@ -115,9 +153,10 @@ const Patients = () => {
                 </>
             }
             {showForm &&
-                <AddEditPatientForm onEdit={onEdit} setOnEdit={setOnEdit} handleBackButtonClick={handleBackButtonClick}/>
+                <AddEditPatientForm onEdit={onEdit} setOnEdit={setOnEdit}
+                />
             }
-        </>
+        </div>
     );
 };
 
