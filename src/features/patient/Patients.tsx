@@ -68,12 +68,10 @@ const Patients = () => {
     }
 
     useEffect( () => {
-        // appeler getPatients() via  fetchPatients() et dispatcher la promesse
         if (patients.length == 0) {
             dispatch(fetchPatients());
         }
-
-    }, [dispatch])
+    }, [dispatch, patients])
 
     return (
         <div className={"section-limiter"}>
