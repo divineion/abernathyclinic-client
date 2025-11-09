@@ -38,30 +38,21 @@ const PatientInfo = (
                         </div>
                     </div>
                     <div className={"patient-contact grid-container"}>
-                        <div className={"grid-item"}>
-                        { patient.phone
-                            ? <>
+                        { patient.phone &&
+                            <div className={"grid-item"}>
                                 <div className={"label"}>Téléphone </div>
                                 <span className={"value"}>{patient.phone}</span>
-                            </>
-                            : <>
-                                <div className={"label"}>Téléphone </div>
-                            </> }
-                        </div>
-                        <div className={"grid-item"}>
-                            { patient.address
-                                ? <>
-                                    <div className={"label"}>Adresse </div>
-                                    <span className={"value"}>
-                                        {patient.address.streetNumber} {patient.address.street} {patient.address.zip} {patient.address.city}
-                                    </span>
-                                </>
-                                : <>
-                                    <div className={"label"}>Adresse</div>
-                                </> }
-                        </div>
+                            </div>
+                        }
+                        { patient.address &&
+                            <div className={"grid-item"}>
+                                <div className={"label"}>Adresse </div>
+                                <span className={"value"}>
+                                    {patient.address.streetNumber} {patient.address.street} {patient.address.zip} {patient.address.city}
+                                </span>
+                            </div>
+                        }
                     </div>
-
                     <div className="mt-3">
                         <Button
                             type={"button"}
