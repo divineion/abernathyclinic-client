@@ -2,6 +2,9 @@ import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {getUserToken} from "./loginThunk.ts";
 import type {AppDispatch} from "../../app/store.ts";
+import Button from "../../common/components/Button.tsx";
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+
 
 const LoginForm = (
 ) => {
@@ -30,13 +33,21 @@ const LoginForm = (
                 <label htmlFor="username">Nom d'utilisateur</label>
                 <input id={"username"} value={username} type="text" onChange={handleUsernameInputChange} autoComplete={"on"} />
             </div>
-
             <div className={"d-flex flex-column"}>
                 <label htmlFor="password">Mot de passe</label>
-                <input id={"password"} value={password} type="password" onChange={handlePasswordInputChange}/>
+                <input id={"password"} value={password}
+                       type="password"
+                       onChange={handlePasswordInputChange}
+                />
             </div>
-
-            <input type={"submit"}/>
+            <Button
+                type={"submit"}
+                className={"btn"}
+                title={"Connexion"}
+                ariaLabel={"Connexion"}
+            >
+                <DoneOutlineIcon/>
+            </Button>
         </form>
     )
 }

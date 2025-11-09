@@ -3,10 +3,12 @@ import type {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
 import type {Address, CreatePatient, UpdatePatient} from "./types.ts";
 import {addPatient, updatePatientDetails} from "./patientThunk.ts";
-import Button from "../../common/components/Button.tsx";
+import Button from "../../common/components/Button.tsx"
+import SaveIcon from '@mui/icons-material/Save'
+import {setToast} from "../snackbar/toastSlice.ts";
 
 const AddEditPatientForm = (
-    {onEdit, setOnEdit, handleBackButtonClick}: AddEditPatientFormProps // on destructure les props
+    {onEdit, setOnEdit}: AddEditPatientFormProps // on destructure les props
 ) => {
     const dispatch = useDispatch<AppDispatch>();
 
@@ -31,17 +33,15 @@ const AddEditPatientForm = (
         }
     }, [onEdit, patient]);
 
-    const handleSubmitButtonClick = async () => {
-        if (onEdit && patient) {
-            const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
-            await dispatch(updatePatientDetails(patient.uuid, patientData))
-            setOnEdit(false);
 
-            return
-        }
-        const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
-        await dispatch(addPatient(addPatientData))
-        handleBackButtonClick()
+    const isSamePatient = () => {
+        return (
+            lastName == patient?.lastName
+            && firstName == patient?.firstName
+            && gender == patient?.gender
+            && phone == patient?.phone
+            && address == patient?.address
+        )
     }
 
     const handleLastNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,57 +65,91 @@ const AddEditPatientForm = (
             setBirthDate(e.target.value)
     }
 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        if (isSamePatient()) {
+            dispatch(setToast({variant: "info", message: "Aucune modification à enregistrer", open: true}))
+            return
+        }
+
+        if (onEdit && patient) {
+            const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
+            await dispatch(updatePatientDetails(patient.uuid, patientData))
+            setOnEdit(false);
+
+            return
+        }
+        const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
+        await dispatch(addPatient(addPatientData))
+    }
+
     return (
         <>
-            <form className={"container"}>
-                <fieldset>
-                    <label htmlFor={"patient-lastName"}>Nom </label>
-                    <input id="patient-lastName" type="text" value={lastName} onChange={handleLastNameInputChange}/>
+            <form className={"section-limiter"} onSubmit={handleSubmit}>
+                <div className={"patient-details grid-container"}>
+                        <div className={"grid-item"}>
+                            <label className={"label"} htmlFor={"patient-lastName"}>Nom </label>
+                            <input className={"value"} id="patient-lastName" type="text" value={lastName}
+                                   onChange={handleLastNameInputChange}/>
+                        </div>
 
-                    <label htmlFor={"patient-firstName"}>Prénom </label>
-                    <input id="patient-firstName" type="text" value={firstName} onChange={handleFirstNameInputChange}/>
+                        <div className={"grid-item"}><label htmlFor={"patient-firstName"}>Prénom </label>
+                            <input id="patient-firstName" type="text" value={firstName} onChange={handleFirstNameInputChange}/>
+                        </div>
+                        <div className={"grid-item"}>
+                            <label htmlFor={"patient-gender"}>Genre</label>
+                            <input id="patient-gender" type="text" value={gender}
+                                   onChange={(e) => setGender(e.target.value)}/>
+                        </div>
+                        <div className={"grid-item"}>
+                            <label htmlFor={"patient-birthDate"}>Date de naissance </label>
+                            <input id="patient-birthDate" type="date" value={birthDate} onChange={handleBirthDateInputChange}
+                                   disabled={onEdit}/>
+                        </div>
+                </div>
 
-                    <label htmlFor={"patient-gender"}>Genre</label>
-                    <input id="patient-gender" type="text" value={gender}
-                               onChange={(e) => setGender(e.target.value)}/>
-                    <label htmlFor={"patient-birthDate"}>Date de naissance </label>
-                    <input id="patient-birthDate" type="date" value={birthDate} onChange={handleBirthDateInputChange}
-                           disabled={onEdit}/>
-                </fieldset>
+                <div className={"patient-contact grid-container"}>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-address-streetNumber"}>N°</label>
+                        <input id={"patient-address-streetNumber"} type="text" value={address?.streetNumber}
+                               onChange={(e) => handleAddressChange('streetNumber', e.target.value)}/>
+                    </div>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-address-street"}>Rue</label>
+                        <input id={"patient-address-street"} type="text" value={address?.street}
+                               onChange={(e) => handleAddressChange('street', e.target.value)}/>
+                    </div>
+                    <div className={"grid-item"}><label htmlFor={"patient-address-zip"}>Code postal</label>
+                        <input id={"patient-address-zip"} type="text" value={address?.zip}
+                               onChange={(e) => handleAddressChange('zip', e.target.value)}/></div>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-address-city"}>Ville</label>
+                        <input id={"patient-address-city"} type="text" value={address?.city}
+                               onChange={(e) => handleAddressChange('city', e.target.value)}/>
 
-                <fieldset>
-                    <label htmlFor={"patient-address-streetNumber"}>N°</label>
-                    <input id={"patient-address-streetNumber"} type="text" value={address?.streetNumber}
-                           onChange={(e) => handleAddressChange('streetNumber', e.target.value)}/>
-
-                    <label htmlFor={"patient-address-street"}>Rue</label>
-                    <input id={"patient-address-street"} type="text" value={address?.street}
-                           onChange={(e) => handleAddressChange('street', e.target.value)}/>
-
-                    <label htmlFor={"patient-address-zip"}>Code postal</label>
-                    <input id={"patient-address-zip"} type="text" value={address?.zip}
-                           onChange={(e) => handleAddressChange('zip', e.target.value)}/>
-
-                    <label htmlFor={"patient-address-city"}>Ville</label>
-                    <input id={"patient-address-city"} type="text" value={address?.city}
-                           onChange={(e) => handleAddressChange('city', e.target.value)}/>
-
-                    <label htmlFor={"patient-phone"}>Téléphone</label>
-                    <input id={"patient-phone"} type="text" value={phone ?? ""} onChange={handlePhoneInputChange}/>
-                </fieldset>
+                    </div>
+                    <div className={"grid-item"}>
+                        <label htmlFor={"patient-phone"}>Téléphone</label>
+                        <input id={"patient-phone"} type="text" value={phone ?? ""} onChange={handlePhoneInputChange}/>
+                    </div>
+                </div>
+                <Button
+                    type={"submit"}
+                    title={"Enregistrer"}
+                    className="btn btn-secondary me-2"
+                    ariaLabel={"Enregistrer le patient"}
+                >
+                    <SaveIcon/>
+                </Button>
             </form>
-
-            <Button value={"enregistrer"}  title={"Ajouter"} className="btn btn-secondary me-2" ariaLabel={"Enregistrer"} handleClick={handleSubmitButtonClick}/>
-            <Button className="btn me-2" ariaLabel={"retour"} handleClick={handleBackButtonClick} value={"Retour"}
-                    title={"Retour"}/>
         </>
     )
 }
 
 type AddEditPatientFormProps = {
-    onEdit: boolean;
-    setOnEdit: (value: boolean) => void;
-    handleBackButtonClick: () => void;
+    onEdit: boolean,
+    setOnEdit: (value: boolean) => void
 }
 
 export default AddEditPatientForm;

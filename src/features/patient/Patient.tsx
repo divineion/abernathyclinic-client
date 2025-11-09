@@ -1,25 +1,49 @@
 import {useEffect, useState} from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../app/store";
 import { fetchPatientByUuid } from "./patientThunk";
 import AddEditPatientForm from "./AddEditPatientForm.tsx";
-import Button from "../../common/components/Button.tsx";
+import Notes from "../note/Notes.tsx";
+import PatientInfo from "./PatientInfo.tsx";
+import Button from "../../common/components/Button.tsx"
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import DescriptionIcon from '@mui/icons-material/Description'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
 const Patient = () => {
     const { uuid } = useParams<{ uuid: string }>();
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
-    const patient = useSelector((state: RootState) => state.patients.selectedPatient);
     const [onEdit, setOnEdit] = useState(false);
+    const [showNotes, setShowNotes] = useState(false);
+    const [showPatientInfo, setShowPatientInfo] = useState(true);
+    const patient = useSelector((state: RootState) => state.patients.selectedPatient);
 
-    const handleEditButtonClick = () => {
-        setOnEdit(true)
+    const navigate = useNavigate();
+
+    const handleBackToListButtonClick = () => {
+        navigate("/patients")
     }
 
-    const handleBackButtonClick = () => {
-        setOnEdit(false);
+
+    const handlePatientTabButtonClick = () => {
+        if (!showPatientInfo) {
+            setShowNotes(false)
+            setShowPatientInfo(true)
+            document.querySelector(".patient-tab-btn")?.classList.add("active-tab")
+            document.querySelector(".notes-tab-btn")?.classList.remove("active-tab")
+        }
     }
+
+    const handleNotesTabButtonClick = () => {
+        if (!showNotes) {
+            setShowNotes(true)
+            setShowPatientInfo(false)
+            document.querySelector(".patient-tab-btn")?.classList.remove("active-tab")
+            document.querySelector(".notes-tab-btn")?.classList.add("active-tab")
+        }
+    }
+
     useEffect(() => {
         if (uuid) {
             dispatch(fetchPatientByUuid(uuid));
@@ -27,34 +51,51 @@ const Patient = () => {
     }, [dispatch, uuid]);
 
     return (
-        <>
-            {patient && !onEdit && (
-                <div className="container mt-4">
-                    <h2>Fiche patient</h2>
-                    <p><strong>Prénom:</strong> {patient.firstName}</p>
-                    <p><strong>Nom:</strong> {patient.lastName}</p>
-                    <p><strong>Date de naissance:</strong> {new Date(patient.birthDate).toLocaleDateString()}</p>
-                    <p><strong>Genre:</strong> {patient.gender}</p>
-                    {patient.phone && <p><strong>Téléphone:</strong> {patient.phone}</p>}
-                    {patient.address && (
-                        <p>
-                            <strong>Adresse:</strong> {patient.address.streetNumber} {patient.address.street} {patient.address.zip} {patient.address.city}
-                        </p>
-                    )}
-
-                    <div className="mt-3">
-                        <Button className={"btn btn-primary"} ariaLabel={"éditer"} title={"éditer"} value={"Modifier"} handleClick={handleEditButtonClick}/>
-                        <Button className={"btn btn-primary me-2"} handleClick={() => navigate("/patients")} ariaLabel={"retour à la liste"} value={"Retour"} title={"Retour"}/>
-                    </div>
+        <div className={"section-limiter"}>
+            <nav className={"patient-page-nav"}>
+                <div className={"patient-page-nav"}>
+                    <Button
+                        type={"button"}
+                        className={"btn patient-tab-btn active-tab"}
+                        title={"Fiche patient"} ariaLabel={"fiche patient"} handleClick={handlePatientTabButtonClick}>
+                        <PermContactCalendarIcon/>
+                    </Button>
+                    <Button
+                        type={"button"}
+                        className={"btn notes-tab-btn"}
+                        title={"Notes"}
+                        ariaLabel={"historique des notes"}
+                        handleClick={handleNotesTabButtonClick}
+                    >
+                        <DescriptionIcon/>
+                    </Button>
                 </div>
-            )}
-            {onEdit && (
+                <div>
+                    <Button
+                        type={"button"}
+                        className={"btn"}
+                        title={"Retour à la liste de patients"}
+                        ariaLabel={"retour à la liste de patients"}
+                        handleClick={ handleBackToListButtonClick}>
+                        <KeyboardBackspaceIcon/>
+                    </Button>
+                </div>
+            </nav>
+            {patient && !onEdit && showPatientInfo &&
+                <PatientInfo setOnEdit={setOnEdit}/>
+            }
+
+            {onEdit && !showNotes &&(
                 <AddEditPatientForm
                     onEdit={onEdit}
                     setOnEdit={setOnEdit}
-                    handleBackButtonClick={handleBackButtonClick}/>
+                />
             )}
-        </>
+
+            {patient && showNotes &&
+                <Notes uuid={patient.uuid}/>
+            }
+        </div>
     );
 };
 
