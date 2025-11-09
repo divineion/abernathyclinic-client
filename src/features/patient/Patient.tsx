@@ -5,6 +5,10 @@ import type { AppDispatch, RootState } from "../../app/store";
 import { fetchPatientByUuid } from "./patientThunk";
 import AddEditPatientForm from "./AddEditPatientForm.tsx";
 import Button from "../../common/components/Button.tsx";
+import Button from "../../common/components/Button.tsx"
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import DescriptionIcon from '@mui/icons-material/Description'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
 const Patient = () => {
     const { uuid } = useParams<{ uuid: string }>();
@@ -27,25 +31,34 @@ const Patient = () => {
     }, [dispatch, uuid]);
 
     return (
-        <>
-            {patient && !onEdit && (
-                <div className="container mt-4">
-                    <h2>Fiche patient</h2>
-                    <p><strong>Prénom:</strong> {patient.firstName}</p>
-                    <p><strong>Nom:</strong> {patient.lastName}</p>
-                    <p><strong>Date de naissance:</strong> {new Date(patient.birthDate).toLocaleDateString()}</p>
-                    <p><strong>Genre:</strong> {patient.gender}</p>
-                    {patient.phone && <p><strong>Téléphone:</strong> {patient.phone}</p>}
-                    {patient.address && (
-                        <p>
-                            <strong>Adresse:</strong> {patient.address.streetNumber} {patient.address.street} {patient.address.zip} {patient.address.city}
-                        </p>
-                    )}
-
-                    <div className="mt-3">
-                        <Button className={"btn btn-primary"} ariaLabel={"éditer"} title={"éditer"} value={"Modifier"} handleClick={handleEditButtonClick}/>
-                        <Button className={"btn btn-primary me-2"} handleClick={() => navigate("/patients")} ariaLabel={"retour à la liste"} value={"Retour"} title={"Retour"}/>
-                    </div>
+        <div className={"section-limiter"}>
+            <nav className={"patient-page-nav"}>
+                <div className={"patient-page-nav"}>
+                    <Button
+                        type={"button"}
+                        className={"btn patient-tab-btn active-tab"}
+                        title={"Fiche patient"} ariaLabel={"fiche patient"} handleClick={handlePatientTabButtonClick}>
+                        <PermContactCalendarIcon/>
+                    </Button>
+                    <Button
+                        type={"button"}
+                        className={"btn notes-tab-btn"}
+                        title={"Notes"}
+                        ariaLabel={"historique des notes"}
+                        handleClick={handleNotesTabButtonClick}
+                    >
+                        <DescriptionIcon/>
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        type={"button"}
+                        className={"btn"}
+                        title={"Retour à la liste de patients"}
+                        ariaLabel={"retour à la liste de patients"}
+                        handleClick={ handleBackToListButtonClick}>
+                        <KeyboardBackspaceIcon/>
+                    </Button>
                 </div>
             )}
             {onEdit && (

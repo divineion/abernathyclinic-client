@@ -41,6 +41,21 @@ const Patients = () => {
         <>
             <Navbar></Navbar>
 
+        <div className={"section-limiter"}>
+            <div className={"d-flex justify-content-end"}>
+                <Button
+                    type={"button"}
+                    className={"btn add-patient-button"}
+                    title={showForm ? "Retour à la liste" : "Enregistrer un nouveau patient"}
+                    handleClick={showForm ? handleBackButtonClick : handleAddPatientClick}
+                    ariaLabel={showForm ? "Retour à la liste" : "Enregistrer un nouveau patient"}
+                >
+                    { showForm
+                        ? <KeyboardBackspaceIcon/>
+                        : <PersonAddAltIcon/>
+                    }
+                </Button>
+            </div>
             {!showForm &&
                 <div className="container mt-4">
                     <h2>Liste des patients</h2>
@@ -84,6 +99,15 @@ const Patients = () => {
                         </tbody>
                     </table>
                 </div>
+                                            <Button
+                                                type={"button"}
+                                                className="btn btn-sm"
+                                                handleClick={() => handleShowPatientClick(patient.uuid)}
+                                                ariaLabel={"voir le patient"}
+                                                title={`voir le patient ${patient.lastName}`}
+                                            >
+                                                <VisibilityIcon/>
+                                            </Button>
             }
             {showForm &&
                 <AddEditPatientForm onEdit={onEdit} setOnEdit={setOnEdit} handleBackButtonClick={handleBackButtonClick}/>
