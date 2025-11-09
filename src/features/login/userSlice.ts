@@ -1,12 +1,16 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 
 interface UserState {
+    id: string,
+    username: string,
     isLoggedIn: boolean,
     token: string | null,
     role: string
 }
 
 const initialState: UserState = {
+    id: "",
+    username: "",
     isLoggedIn: false,
     token: localStorage.getItem("authToken"),
     role: ""
@@ -17,6 +21,12 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        setId: (state, action: PayloadAction<string>) => {
+            state.id = action.payload
+        },
+        setUsername: (state, action: PayloadAction<string>) => {
+            state.username = action.payload
+        },
         setToken: (state, action: PayloadAction<string>) => {
             state.token = action.payload
         },
@@ -36,4 +46,4 @@ export const userSlice = createSlice({
     }
 })
 
-export const {setToken, setIsLoggedIn, clearUser, setRole} = userSlice.actions;
+export const {setId, setUsername, setToken, setIsLoggedIn, clearUser, setRole} = userSlice.actions;
