@@ -1,6 +1,8 @@
 import {loginCheck} from "../../services/login.ts";
 import {clearUser, setId, setIsLoggedIn, setRole, setToken, setUsername} from "./userSlice.ts";
 import type {AppDispatch} from "../../app/store.ts";
+import {setFilter, setFilteredNotes, setNotes} from "../note/noteSlice.ts";
+import { setPatients} from "../patient/patientSlice.ts";
 
 export const getUserToken = (username: string, password: string) => async (dispatch: AppDispatch) => {
     try {
@@ -30,6 +32,10 @@ export const getUserToken = (username: string, password: string) => async (dispa
 export const logout = () => (dispatch:AppDispatch) => {
     try {
         dispatch(clearUser())
+        dispatch(setFilter(false))
+        dispatch(setFilteredNotes([]))
+        dispatch(setNotes([]))
+        dispatch(setPatients([]))
     } catch (error: unknown) {
             console.error(error)
     }
