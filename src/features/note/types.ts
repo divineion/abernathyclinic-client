@@ -16,7 +16,6 @@ export interface MinimalNote {
 }
 
 export interface UpdateNote {
-    doctorId: string,
     content: string
 }
 

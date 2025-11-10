@@ -39,7 +39,7 @@ const AddEditNoteForm = ({onEdit, setOnEdit, onSuccess}: AddEditNoteFormProps)=>
 
             return
         }
-        await dispatch(updateNote(note.id, {doctorId: note.doctorId, content: content}))
+        await dispatch(updateNote(note.id, {content: content}))
         dispatch(getNotesByPatient(note.patientUuid))
 
         setOnEdit(false)

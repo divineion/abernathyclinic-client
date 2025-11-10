@@ -23,7 +23,7 @@ api.interceptors.request.use(function (config){
     }
 
     if (role) {
-        config.headers["X-Auth-Roles"] = role
+        config.headers["X-Auth-User-Roles"] = role
     }
 
     return config
