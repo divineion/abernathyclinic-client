@@ -6,7 +6,7 @@ import {
     GET_NOTES_ROUTE,
     UPDATE_NOTE_ROUTE
 } from "../utils/apiRoutes.ts";
-import type {MinimalNote, Note, UpdateNote} from "../features/note/types.ts";
+import type {CreateNote, MinimalNote, Note, UpdateNote} from "../features/note/types.ts";
 import type {UpdateResultDTO} from "../common/types.ts";
 
 export const getNotesByPatientUuid = async (uuid: string): Promise<MinimalNote[]> =>  {
@@ -53,7 +53,7 @@ export  const updateNoteById = async (id: string, note: UpdateNote): Promise<Upd
     }
 }
 
-export  const createNote = async (uuid: string, note: Note): Promise<Note | null> => {
+export  const createNote = async (uuid: string, note: CreateNote): Promise<Note | null> => {
     try {
         const response: AxiosResponse = await api.post(CREATE_NOTE_ROUTE(uuid), note)
 

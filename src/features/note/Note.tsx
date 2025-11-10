@@ -26,13 +26,18 @@ const Note = ({showNote, setShowNote, onEdit, setOnEdit} : NoteProps) => {
         }
     }
 
+    const closeForm = () => {
+        setOnEdit(false)
+        setShowNote(true)
+    }
+
     return (
         <>
             { note && showNote &&
                 <>
                     <div className={"section-limiter"}>
-                        Note du {new Date(note.createdAt).toLocaleString()}
-                        {note.updatedAt && <span>Dernière mise à jour le {new Date(note.updatedAt).toLocaleString('fr-FR', {dateStyle: 'short'})}</span>}
+                        Note du {new Date(note.createdAt).toLocaleString()} <br/>
+                        {note.updatedAt && <span>Dernière mise à jour le {new Date(note.updatedAt).toLocaleString()}</span>}
                             <div className={"note-content"}>
                                 {content}
                             </div>
@@ -51,7 +56,7 @@ const Note = ({showNote, setShowNote, onEdit, setOnEdit} : NoteProps) => {
             }
 
             { onEdit &&
-                <AddEditNoteForm onEdit={onEdit} setOnEdit={setOnEdit}/>
+                <AddEditNoteForm onEdit={onEdit} setOnEdit={setOnEdit} onSuccess={closeForm}/>
             }
         </>
     )

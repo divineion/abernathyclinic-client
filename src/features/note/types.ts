@@ -16,5 +16,13 @@ export interface MinimalNote {
 }
 
 export interface UpdateNote {
+    doctorId: string,
+    content: string
+}
+
+export interface CreateNote {
+    patientUuid: string,
+    doctorId: string,
+    createdAt: string,
     content: string
 }

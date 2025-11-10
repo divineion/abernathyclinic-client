@@ -13,9 +13,17 @@ const api = axios.create({
 // You can intercept requests or responses before they are handled by then or catch.
 // instance.interceptors.request.use(function () {/*...*/});
 api.interceptors.request.use(function (config){
-    const token = store.getState().user.token
+    const {token, id, role } = store.getState().user
     if (token !== "") {
         config.headers.Authorization = `Basic ${token}`
+    }
+
+    if (id) {
+        config.headers["X-Auth-User-Id"] = id
+    }
+
+    if (role) {
+        config.headers["X-Auth-Roles"] = role
     }
 
     return config
