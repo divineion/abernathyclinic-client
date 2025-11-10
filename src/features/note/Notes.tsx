@@ -8,6 +8,7 @@ import Button from "../../common/components/Button.tsx"
 import Note from "./Note.tsx";
 import AddEditNoteForm from "./AddEditNoteForm.tsx";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 export const Notes= ({uuid}: NoteProps) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -15,6 +16,7 @@ export const Notes= ({uuid}: NoteProps) => {
     const notes = useSelector((state: RootState) => state.notes.notes)
 
     const [showNote, setShowNote] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [onEdit, setOnEdit] = useState(false);
 
     const handleShowNoteClick = (id: string) => {
@@ -45,14 +47,30 @@ export const Notes= ({uuid}: NoteProps) => {
 
     const rows = notes
 
+    const handleAddNoteClick = () => {
+        setShowNote(false)
+        setShowForm(true)
+    }
+
+    const closeForm = () => {
+        if (onEdit) {
+            setOnEdit(false)
+        } else {
+            setShowForm(false)
+        }
+    }
+
     useEffect(() => {
         dispatch(getNotesByPatient(uuid))
     }, [dispatch, uuid])
 
     return (
         <>
-            { !showNote && !onEdit &&
+            { !showNote && !onEdit && !showForm &&
                 <section className={"section-limiter"}>
+                    <Button ariaLabel={"btn"} title={"add-note-button"} className={"btn"} type={"button"} handleClick={handleAddNoteClick}>
+                        <NoteAddIcon/>
+                    </Button>
                     <DataGrid columns={columns}
                       rows={rows}
                       getRowId={(row) => row.id}
@@ -82,19 +100,20 @@ export const Notes= ({uuid}: NoteProps) => {
             }
 
             {showNote &&
-                <>
                 <Note
                     showNote={showNote}
                     setShowNote={setShowNote}
                     onEdit={onEdit}
                     setOnEdit={setOnEdit}
                 />
-                </>
             }
 
             {onEdit &&
-                <AddEditNoteForm onEdit={onEdit} setOnEdit={setOnEdit}/>
+                <AddEditNoteForm onEdit={onEdit} setOnEdit={setOnEdit} onSuccess={closeForm}/>
+            }
 
+            {showForm &&
+                <AddEditNoteForm onEdit={onEdit} setOnEdit={setOnEdit} onSuccess={closeForm}/>
             }
         </>
     )
