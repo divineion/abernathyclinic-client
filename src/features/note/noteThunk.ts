@@ -1,7 +1,13 @@
-import {getNoteById, getNotesByDoctorId, getNotesByPatientUuid, updateNoteById} from "../../services/note.ts";
+import {
+    createNote,
+    getNoteById,
+    getNotesByDoctorId,
+    getNotesByPatientUuid,
+    updateNoteById
+} from "../../services/note.ts";
 import type {AppDispatch} from "../../app/store.ts";
 import {setFilteredNotes, setNote, setNotes} from "./noteSlice.ts";
-import type {UpdateNote} from "./types.ts";
+import type {CreateNote, UpdateNote} from "./types.ts";
 import {setToast} from "../snackbar/toastSlice.ts";
 import {isAxiosError} from "axios";
 
@@ -48,6 +54,19 @@ export const updateNote = (id: string, note: UpdateNote) => async (dispatch: App
         }
 
         dispatch(setToast({open: true, message: "La mise à jour a été effectuée", variant:"success"}))
+    } catch (error: unknown) {
+        if (isAxiosError(error)) {
+            dispatch(setToast({open: true, message: error.message, variant:"error"}))
+        }
+    }
+}
+
+export const addNote = (uuid: string, note: CreateNote) => async (dispatch: AppDispatch) => {
+    try {
+        const newNote = await createNote(uuid, note)
+        if (newNote) {
+            dispatch(setToast({open: true, message: "La note a bien été créée", variant:"success"}))
+        }
     } catch (error: unknown) {
         if (isAxiosError(error)) {
             dispatch(setToast({open: true, message: error.message, variant:"error"}))
