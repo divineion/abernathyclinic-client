@@ -63,10 +63,10 @@ const Patient = () => {
     }
 
     useEffect(() => {
-        if (uuid) {
+        if (uuid && !patient) {
             dispatch(fetchPatientByUuid(uuid));
         }
-    }, [dispatch, uuid]);
+    }, [dispatch, uuid, patient]);
 
     return (
         <div className={"section-limiter"}>
