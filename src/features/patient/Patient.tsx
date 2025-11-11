@@ -10,6 +10,8 @@ import Button from "../../common/components/Button.tsx"
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import DescriptionIcon from '@mui/icons-material/Description'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import Report from "../report/Report.tsx";
 
 const Patient = () => {
     const { uuid } = useParams<{ uuid: string }>();
@@ -17,6 +19,7 @@ const Patient = () => {
     const [onEdit, setOnEdit] = useState(false);
     const [showNotes, setShowNotes] = useState(false);
     const [showPatientInfo, setShowPatientInfo] = useState(true);
+    const [showReport, setShowReport] = useState(false);
     const patient = useSelector((state: RootState) => state.patients.selectedPatient);
 
     const navigate = useNavigate();
@@ -25,13 +28,14 @@ const Patient = () => {
         navigate("/patients")
     }
 
-
     const handlePatientTabButtonClick = () => {
         if (!showPatientInfo) {
             setShowNotes(false)
             setShowPatientInfo(true)
+            setShowReport(false)
             document.querySelector(".patient-tab-btn")?.classList.add("active-tab")
             document.querySelector(".notes-tab-btn")?.classList.remove("active-tab")
+            document.querySelector(".report-tab-btn")?.classList.remove("active-tab")
         }
     }
 
@@ -39,8 +43,21 @@ const Patient = () => {
         if (!showNotes) {
             setShowNotes(true)
             setShowPatientInfo(false)
+            setShowReport(false)
+            document.querySelector(".report-tab-btn")?.classList.remove("active-tab")
             document.querySelector(".patient-tab-btn")?.classList.remove("active-tab")
             document.querySelector(".notes-tab-btn")?.classList.add("active-tab")
+        }
+    }
+
+    const handleReportTabButtonClick = () => {
+        if (!showReport) {
+            setShowReport(true)
+            setShowNotes(false)
+            setShowPatientInfo(false)
+            document.querySelector(".patient-tab-btn")?.classList.remove("active-tab")
+            document.querySelector(".notes-tab-btn")?.classList.remove("active-tab")
+            document.querySelector(".report-tab-btn")?.classList.add("active-tab")
         }
     }
 
@@ -69,6 +86,15 @@ const Patient = () => {
                     >
                         <DescriptionIcon/>
                     </Button>
+                    <Button
+                        type={"button"}
+                        className={"btn report-tab-btn"}
+                        title={"Rapport de risque de diabète"}
+                        ariaLabel={"rapport de risque de diabète"}
+                        handleClick={handleReportTabButtonClick}
+                    >
+                        <AssessmentIcon/>
+                    </Button>
                 </div>
                 <div>
                     <Button
@@ -94,6 +120,10 @@ const Patient = () => {
 
             {patient && showNotes &&
                 <Notes uuid={patient.uuid}/>
+            }
+
+            { patient && showReport &&
+                <Report patientUuid={patient.uuid}/>
             }
         </div>
     );
