@@ -3,6 +3,7 @@ import {patientSlice} from "../features/patient/patientSlice";
 import {userSlice} from "../features/login/userSlice.ts";
 import {noteSlice} from "../features/note/noteSlice.ts";
 import {toastSlice} from "../features/snackbar/toastSlice.ts";
+import {reportSlice} from "../features/report/reportSlice.ts";
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
         patients: patientSlice.reducer,
         user: userSlice.reducer,
         notes: noteSlice.reducer,
-        toast: toastSlice.reducer
+        toast: toastSlice.reducer,
+        report: reportSlice.reducer
     }
 })
 
