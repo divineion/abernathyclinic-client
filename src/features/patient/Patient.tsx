@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../app/store";
-import { fetchPatientByUuid } from "./patientThunk";
+import {clearAllPatientData, fetchPatientByUuid} from "./patientThunk";
 import AddEditPatientForm from "./AddEditPatientForm.tsx";
 import Notes from "../note/Notes.tsx";
 import PatientInfo from "./PatientInfo.tsx";
@@ -25,6 +25,7 @@ const Patient = () => {
     const navigate = useNavigate();
 
     const handleBackToListButtonClick = () => {
+        dispatch(clearAllPatientData())
         navigate("/patients")
     }
 
