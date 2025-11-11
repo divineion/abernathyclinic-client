@@ -61,8 +61,10 @@ export const Notes= ({uuid}: NoteProps) => {
     }
 
     useEffect(() => {
-        dispatch(getNotesByPatient(uuid))
-    }, [dispatch, uuid])
+        if(notes.length == 0) {
+            dispatch(getNotesByPatient(uuid))
+        }
+    }, [dispatch, uuid, notes])
 
     return (
         <>

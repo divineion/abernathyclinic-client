@@ -28,12 +28,15 @@ export const patientSlice = createSlice({
         },
         setPatient: (state, action: PayloadAction<Patient>) => {
             state.selectedPatient = action.payload
+        },
+        clearPatient: (state) => {
+            state.selectedPatient = null
         }
     }
 })
 
 // 4. j'exporte les actions pour pouvoir les use dans les components
-export const {setPatient, setPatients } =  patientSlice.actions
+export const { setPatient, setPatients, clearPatient } =  patientSlice.actions
 
 // 5. j'exporte le reducer pour pouvoir l'utiliser dans le store
 export default patientSlice.reducer

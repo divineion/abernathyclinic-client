@@ -30,10 +30,14 @@ export const noteSlice = createSlice({
         },
         setFilteredNotes: (state, action: PayloadAction<MinimalNote[]>) => {
             state.filteredNotes = action.payload
+        },
+        clearNotes: (state) => {
+            state.notes = []
+            state.selectedNote = null
         }
     }
 })
 
-export const { setNote, setNotes, setFilter, setFilteredNotes } = noteSlice.actions
+export const { setNote, setNotes, setFilter, setFilteredNotes, clearNotes } = noteSlice.actions
 
 export default noteSlice.reducer

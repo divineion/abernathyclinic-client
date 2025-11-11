@@ -1,10 +1,11 @@
 import type {AppDispatch} from "../../app/store";
-import { setPatients, setPatient } from "./patientSlice";
+import {setPatients, setPatient, clearPatient} from "./patientSlice";
 import {getPatients, getPatientByUuid, updatePatient, createPatient} from "../../services/patient";
 import type {CreatePatient, UpdatePatient} from "./types.ts";
 import {isAxiosError} from "axios";
 import {setToast} from "../snackbar/toastSlice.ts";
-
+import {clearNotes} from "../note/noteSlice.ts";
+import {clearReport} from "../report/reportSlice.ts";
 
 // fetch patientsList
 export const fetchPatients = () => async (dispatch: AppDispatch) => {
@@ -58,3 +59,9 @@ export const addPatient = (patientData: CreatePatient) => async (dispatch: AppDi
         }
     }
 }
+
+export const clearAllPatientData = () => (dispatch: AppDispatch) => {
+    dispatch(clearPatient());
+    dispatch(clearNotes());
+    dispatch(clearReport());
+};
