@@ -13,3 +13,6 @@ export const GET_NOTES_BY_DOCTOR_ROUTE = (id: string) => `http://localhost:8080/
 export const GET_NOTE_ROUTE = (id: string) => `http://localhost:8080/note/${id}`;
 export const UPDATE_NOTE_ROUTE = (id: string) => `http://localhost:8080/note/${id}/update`;
 export const CREATE_NOTE_ROUTE = (patientUuid: string) => `http://localhost:8080/note/patient/${patientUuid}`;
+
+// report
+export const GET_REPORT_ROUTE = (uuid: string) => `http://localhost:8080/report/${uuid}`
