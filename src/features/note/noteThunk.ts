@@ -39,10 +39,12 @@ export const getNote = (id: string) => async (dispatch: AppDispatch) => {
         if (data) {
             dispatch(setNote(data))
         }
-    } catch (error: unknown) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, variant: "error", message: error.message}))
-        }
+    } catch (error) {
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: isAxiosError(error) ? error.message : "Une erreur est survenue"
+        }))
     }
 }
 
@@ -54,10 +56,12 @@ export const updateNote = (id: string, note: UpdateNote) => async (dispatch: App
         }
 
         dispatch(setToast({open: true, message: "La mise à jour a été effectuée", variant:"success"}))
-    } catch (error: unknown) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, message: error.message, variant:"error"}))
-        }
+    } catch (error) {
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: isAxiosError(error) ? error.message : "Une erreur est survenue"
+        }))
     }
 }
 
@@ -65,11 +69,13 @@ export const addNote = (uuid: string, note: CreateNote) => async (dispatch: AppD
     try {
         const newNote = await createNote(uuid, note)
         if (newNote) {
-            dispatch(setToast({open: true, message: "La note a bien été créée", variant:"success"}))
+            dispatch(setToast({open: true, message: "La note a été enregistrée", variant:"success"}))
         }
-    } catch (error: unknown) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, message: error.message, variant:"error"}))
-        }
+    } catch (error) {
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: isAxiosError(error) ? error.message : "Une erreur est survenue"
+        }))
     }
 }

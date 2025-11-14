@@ -13,8 +13,10 @@ export const generateReport = (patientUuid: string) => async (dispatch: AppDispa
         }
 
     } catch (error) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, variant: "error", message: error.message}))
-        }
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: isAxiosError(error) ? error.message : "Une erreur est survenue"
+        }))
     }
 }
