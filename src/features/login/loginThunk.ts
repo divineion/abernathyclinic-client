@@ -3,6 +3,8 @@ import {clearUser, setId, setIsLoggedIn, setRole, setToken, setUsername} from ".
 import type {AppDispatch} from "../../app/store.ts";
 import {setFilter, setFilteredNotes} from "../note/noteSlice.ts";
 import {clearAllPatientData} from "../patient/patientThunk.ts";
+import {setToast} from "../snackbar/toastSlice.ts";
+import {isAxiosError} from "axios";
 
 export const getUserToken = (username: string, password: string) => async (dispatch: AppDispatch) => {
     try {
@@ -24,8 +26,14 @@ export const getUserToken = (username: string, password: string) => async (dispa
             dispatch(setId(id))
             dispatch(setUsername(usernameFromBackend))
         }
-    } catch (error: unknown) {
-        console.error(error)
+    } catch (error) {
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: isAxiosError(error) && error.response?.status === 401
+                ? "Veuillez vérifier vos identifiants"
+                : "Une erreur est survenue"
+        }))
     }
 }
 

@@ -7,15 +7,35 @@ import {setToast} from "../snackbar/toastSlice.ts";
 import {clearNotes} from "../note/noteSlice.ts";
 import {clearReport} from "../report/reportSlice.ts";
 
+const getPatientErrorMessage = (error: unknown, userAction: "fetch" | "add" | "update") => {
+    if (isAxiosError(error)) {
+        switch (error.response?.status) {
+            case 400: return "Requête invalide";
+            case 401: return "Vous n'êtes pas autorisé";
+            case 404: return "Patient non trouvé";
+            case 500: return "Erreur serveur, veuillez réessayer plus tard";
+            default: return `Erreur inattendue (${error.response?.status})`;
+        }
+    }
+    return userAction === "add"
+        ? "L'ajout du patient n'a pas pu aboutir"
+        : userAction === "update"
+            ? "La mise à jour du patient n'a pas pu aboutir"
+            : "Une erreur est survenue";
+};
+
+
 // fetch patientsList
 export const fetchPatients = () => async (dispatch: AppDispatch) => {
     try {
         const data = await getPatients();
         if (data) dispatch(setPatients(data));
     } catch (error) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, variant: "error", message: error.message}))
-        }
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: getPatientErrorMessage(error, "fetch")
+        }))
     }
 };
 
@@ -27,9 +47,11 @@ export const fetchPatientByUuid = (id: string) => async (dispatch: AppDispatch) 
             dispatch(setPatient(patient));
         }
     } catch (error) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, variant: "error", message: error.message}))
-        }
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: getPatientErrorMessage(error, "fetch")
+        }))
     }
 };
 
@@ -40,15 +62,13 @@ export const updatePatientDetails = (uuid: string, patientData: UpdatePatient) =
         if (patient) {
             dispatch(setPatient(patient))
         }
-
-        return true
     } catch(error) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, variant: "error", message: error.message}))
-        }
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: getPatientErrorMessage(error, "update")
+        }))
 
-        dispatch(setToast({open: true, variant: "error", message: "La mise à jour n'a pas pu aboutir"}))
-        // pr interrompre l'exécution dans le composant et ne pas fermer le formulaire
         throw error;
     }
 }
@@ -61,14 +81,13 @@ export const addPatient = (patientData: CreatePatient) => async (dispatch: AppDi
             dispatch(setPatient(patient))
             dispatch(setToast({open: true, variant: "success", message:"Le patient a été enregistré."}))
         }
-
-        return true
     } catch(error) {
-        if (isAxiosError(error)) {
-            dispatch(setToast({open: true, variant: "error", message: error.message}))
-        }
+        dispatch(setToast({
+            open: true,
+            variant: "error",
+            message: getPatientErrorMessage(error, "add")
+        }))
 
-        dispatch(setToast({open: true, variant: "error", message: "L'ajout du patient n'a pas pu aboutir"}))
         throw error;
     }
 }
