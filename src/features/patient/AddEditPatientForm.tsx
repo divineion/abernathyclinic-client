@@ -2,13 +2,14 @@ import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
 import type {Address, CreatePatient, UpdatePatient} from "./types.ts";
-import {addPatient, updatePatientDetails} from "./patientThunk.ts";
+import {addPatient, clearAllPatientData, fetchPatients, updatePatientDetails} from "./patientThunk.ts";
 import Button from "../../common/components/Button.tsx"
 import SaveIcon from '@mui/icons-material/Save'
 import {setToast} from "../snackbar/toastSlice.ts";
 
+// TODO handle empty fields
 const AddEditPatientForm = (
-    {onEdit, setOnEdit}: AddEditPatientFormProps // on destructure les props
+    {onEdit, setOnEdit, setShowForm}: AddEditPatientFormProps // on destructure les props
 ) => {
     const dispatch = useDispatch<AppDispatch>();
 
@@ -74,14 +75,19 @@ const AddEditPatientForm = (
         }
 
         if (onEdit && patient) {
-            const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
+            const patientData: UpdatePatient = { lastName, firstName, address, phone }
             await dispatch(updatePatientDetails(patient.uuid, patientData))
             setOnEdit(false);
 
             return
         }
         const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
-        await dispatch(addPatient(addPatientData))
+        await dispatch(addPatient(addPatientData));
+        dispatch(clearAllPatientData())
+        dispatch(fetchPatients())
+        if (setShowForm) {
+            setShowForm(false)
+        }
     }
 
     return (
@@ -100,7 +106,8 @@ const AddEditPatientForm = (
                         <div className={"grid-item"}>
                             <label htmlFor={"patient-gender"}>Genre</label>
                             <input id="patient-gender" type="text" value={gender}
-                                   onChange={(e) => setGender(e.target.value)}/>
+                                   onChange={(e) => setGender(e.target.value)}
+                                   disabled={onEdit}/>
                         </div>
                         <div className={"grid-item"}>
                             <label htmlFor={"patient-birthDate"}>Date de naissance </label>
@@ -149,7 +156,8 @@ const AddEditPatientForm = (
 
 type AddEditPatientFormProps = {
     onEdit: boolean,
-    setOnEdit: (value: boolean) => void
+    setOnEdit: (value: boolean) => void,
+    setShowForm?: (value: boolean) => void
 }
 
 export default AddEditPatientForm;

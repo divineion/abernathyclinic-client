@@ -62,8 +62,12 @@ const Patient = () => {
         }
     }
 
+    // rpoblème de mise à jour intempestive du state patient à caused e la condition
+    // ok... lors du chargement de la page patient, j'ai bien un uuid dans le state local et
+    // un patient null puisque je l'ai clear
+    // donc : fetche le patient s'il n'y a pas de patient OU si l'uuid du patient n'est pas la même que sur la page
     useEffect(() => {
-        if (uuid && !patient) {
+        if (uuid && (!patient || patient.uuid !== uuid)) {
             dispatch(fetchPatientByUuid(uuid));
         }
     }, [dispatch, uuid, patient]);
@@ -111,7 +115,7 @@ const Patient = () => {
             {patient && !onEdit && showPatientInfo &&
                 <PatientInfo setOnEdit={setOnEdit}/>
             }
-
+{/*ATTENTION UPDATE PATIENT COMPONENT AFTER UPDATING NOTES TO COMPUTE REPORT*/}
             {onEdit && !showNotes &&(
                 <AddEditPatientForm
                     onEdit={onEdit}
