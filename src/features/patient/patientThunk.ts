@@ -23,7 +23,9 @@ export const fetchPatients = () => async (dispatch: AppDispatch) => {
 export const fetchPatientByUuid = (id: string) => async (dispatch: AppDispatch) => {
     try {
         const patient = await getPatientByUuid(id);
-        if (patient) dispatch(setPatient(patient));
+        if (patient) {
+            dispatch(setPatient(patient));
+        }
     } catch (error) {
         if (isAxiosError(error)) {
             dispatch(setToast({open: true, variant: "error", message: error.message}))
