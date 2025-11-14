@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
 import type {Address, CreatePatient, UpdatePatient} from "./types.ts";
-import {addPatient, updatePatientDetails} from "./patientThunk.ts";
+import {addPatient, clearAllPatientData, fetchPatients, updatePatientDetails} from "./patientThunk.ts";
 import Button from "../../common/components/Button.tsx"
 import SaveIcon from '@mui/icons-material/Save'
 import {setToast} from "../snackbar/toastSlice.ts";
@@ -81,7 +81,12 @@ const AddEditPatientForm = (
             return
         }
         const addPatientData: CreatePatient = { lastName, firstName, birthDate, gender, address, phone }
-        await dispatch(addPatient(addPatientData))
+        await dispatch(addPatient(addPatientData));
+        dispatch(clearAllPatientData())
+        dispatch(fetchPatients())
+        if (setShowForm) {
+            setShowForm(false)
+        }
     }
 
     return (
