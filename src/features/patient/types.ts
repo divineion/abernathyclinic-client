@@ -19,7 +19,6 @@ export interface MinimalPatient {
 export interface UpdatePatient {
     lastName: string,
     firstName: string,
-    gender: string,
     address?: Address | null,
     phone?: string | null
 }

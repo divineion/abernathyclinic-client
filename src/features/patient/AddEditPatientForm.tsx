@@ -7,6 +7,7 @@ import Button from "../../common/components/Button.tsx"
 import SaveIcon from '@mui/icons-material/Save'
 import {setToast} from "../snackbar/toastSlice.ts";
 
+// TODO handle empty fields
 const AddEditPatientForm = (
     {onEdit, setOnEdit, setShowForm}: AddEditPatientFormProps // on destructure les props
 ) => {
@@ -74,7 +75,7 @@ const AddEditPatientForm = (
         }
 
         if (onEdit && patient) {
-            const patientData: UpdatePatient = { lastName, firstName, gender, address, phone }
+            const patientData: UpdatePatient = { lastName, firstName, address, phone }
             await dispatch(updatePatientDetails(patient.uuid, patientData))
             setOnEdit(false);
 
@@ -105,7 +106,8 @@ const AddEditPatientForm = (
                         <div className={"grid-item"}>
                             <label htmlFor={"patient-gender"}>Genre</label>
                             <input id="patient-gender" type="text" value={gender}
-                                   onChange={(e) => setGender(e.target.value)}/>
+                                   onChange={(e) => setGender(e.target.value)}
+                                   disabled={onEdit}/>
                         </div>
                         <div className={"grid-item"}>
                             <label htmlFor={"patient-birthDate"}>Date de naissance </label>

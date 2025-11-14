@@ -1,7 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 
 export interface Report {
-    patientUuid: string,
     riskLevel: string
 }
 
