@@ -151,8 +151,7 @@ const Patients = () => {
                 </>
             }
             {showForm &&
-                <AddEditPatientForm onEdit={onEdit} setOnEdit={setOnEdit}
-                />
+                <AddEditPatientForm onEdit={onEdit} setOnEdit={setOnEdit} setShowForm={setShowForm}/>
             }
         </div>
     );

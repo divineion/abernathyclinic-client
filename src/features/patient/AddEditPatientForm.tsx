@@ -8,7 +8,7 @@ import SaveIcon from '@mui/icons-material/Save'
 import {setToast} from "../snackbar/toastSlice.ts";
 
 const AddEditPatientForm = (
-    {onEdit, setOnEdit}: AddEditPatientFormProps // on destructure les props
+    {onEdit, setOnEdit, setShowForm}: AddEditPatientFormProps // on destructure les props
 ) => {
     const dispatch = useDispatch<AppDispatch>();
 
@@ -154,7 +154,8 @@ const AddEditPatientForm = (
 
 type AddEditPatientFormProps = {
     onEdit: boolean,
-    setOnEdit: (value: boolean) => void
+    setOnEdit: (value: boolean) => void,
+    setShowForm?: (value: boolean) => void
 }
 
 export default AddEditPatientForm;
