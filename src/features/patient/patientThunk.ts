@@ -40,10 +40,16 @@ export const updatePatientDetails = (uuid: string, patientData: UpdatePatient) =
         if (patient) {
             dispatch(setPatient(patient))
         }
+
+        return true
     } catch(error) {
         if (isAxiosError(error)) {
             dispatch(setToast({open: true, variant: "error", message: error.message}))
         }
+
+        dispatch(setToast({open: true, variant: "error", message: "La mise à jour n'a pas pu aboutir"}))
+        // pr interrompre l'exécution dans le composant et ne pas fermer le formulaire
+        throw error;
     }
 }
 
@@ -55,10 +61,15 @@ export const addPatient = (patientData: CreatePatient) => async (dispatch: AppDi
             dispatch(setPatient(patient))
             dispatch(setToast({open: true, variant: "success", message:"Le patient a été enregistré."}))
         }
+
+        return true
     } catch(error) {
         if (isAxiosError(error)) {
             dispatch(setToast({open: true, variant: "error", message: error.message}))
         }
+
+        dispatch(setToast({open: true, variant: "error", message: "L'ajout du patient n'a pas pu aboutir"}))
+        throw error;
     }
 }
 
