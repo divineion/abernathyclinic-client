@@ -1,5 +1,4 @@
 /* Layout */
-
 html, body {
     margin: 0 auto;
     font-family: Roboto, sans-serif;
@@ -128,10 +127,12 @@ h1 {
   line-height: 1.1;
 }
 
-
 /* PATIENT PAGE */
 /* Note tab */
 .note-content {
     height: 60%;
     border: inset grey 2px;
+    /*Les sauts de ligne ont uniquement lieu avec les caractères de saut de ligne et avec les éléments <br>
+      et on a des passages à la ligne automatiques.*/
+    white-space: pre-wrap;
 }
