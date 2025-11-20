@@ -22,6 +22,5 @@ export interface UpdateNote {
 export interface CreateNote {
     patientUuid: string,
     doctorId: string,
-    createdAt: string,
     content: string
 }

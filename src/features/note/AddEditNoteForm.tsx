@@ -52,7 +52,6 @@ const AddEditNoteForm = ({onEdit, setOnEdit, onSuccess}: AddEditNoteFormProps)=>
             await dispatch(addNote(patient.uuid, {
                 patientUuid: patient.uuid,
                 doctorId: user.id,
-                createdAt: new Date().toLocaleString(),
                 content: content
             }))
 
