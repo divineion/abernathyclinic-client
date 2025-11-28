@@ -64,7 +64,7 @@ export const Notes= ({uuid}: NoteProps) => {
         if(notes.length == 0) {
             dispatch(getNotesByPatient(uuid))
         }
-    }, [dispatch, uuid, notes])
+    }, [dispatch, uuid, notes.length])
 
     return (
         <>
