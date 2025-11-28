@@ -1,0 +1,40 @@
+export interface Patient {
+    uuid: string,
+    lastName: string,
+    firstName: string,
+    birthDate: string,
+    gender: string,
+    address?: Address,
+    phone?: string
+}
+
+export interface MinimalPatient {
+    uuid: string,
+    firstName: string,
+    lastName: string,
+    birthDate: string,
+    gender: string
+}
+
+export interface UpdatePatient {
+    lastName: string,
+    firstName: string,
+    address?: Address | null,
+    phone?: string | null
+}
+
+export interface CreatePatient {
+    lastName: string,
+    firstName: string,
+    birthDate: string,
+    gender: string,
+    address?: Address | null,
+    phone?: string | null
+}
+
+export interface Address {
+    streetNumber: string,
+    street: string,
+    city: string,
+    zip: string
+}

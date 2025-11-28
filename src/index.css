@@ -1,68 +1,138 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Layout */
+html, body {
+    margin: 0 auto;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: #242424;
+    font-size: 1.2rem;
 }
 
+:root {
+    color-scheme: light dark;
+    --component-bg-color-dark: #212529;
+    --component-text-color-dark: rgb(149, 146, 146);
+}
+
+#root {
+    margin: 0;
+    width: 100svw;
+    padding: 2rem;
+    height: 100svh;
+}
+
+/* Navbar component */
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Button component */
+button.btn {
+    color: var(--component-text-color-dark);
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    box-shadow: 4px 8px 6px 0 #0000009e;
+}
+
+button.btn.active-tab, button.btn:hover {
+    border-color: #646cff;
+    box-shadow: #646cff 0 0 9px 0;
+}
+
+button.btn.active-tab {
+    background: rgba(43, 46, 97, 0.78);
+    box-shadow: azure 0 0 9px 0;
+}
+
+button.btn:focus,
+button.btn:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.user-actions .btn:hover {
+    color: var(--component-text-color-dark);
+}
+
+/* Containers */
+.section-limiter {
+    color: var(--component-text-color-dark);
+    border: solid rgba(43, 46, 97, 0.78) 1px;
+    padding: 1rem;
+    margin: 2rem;
+    box-shadow: rgba(12, 13, 51, 0.22) 6px 6px 2px;
+    background: var(--component-bg-color-dark);
+    height: 90%;
+}
+
+/* PATIENTS PAGE */
+.section-limiter .patients-list-table-container {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    height: 70%;
+}
+
+/* AddEditPatientForm */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 2rem;
+    padding: 1rem 0;
+}
+
+/* AddEditPatientForm : internal grid (pair label/input) */
+.grid-item {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 10px;
+    align-items: baseline;
+}
+
+.grid-item .label {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.grid-item .value {
+    color: var(--component-text-color-dark);
+    border: inset var(--component-bg-color-dark) 1px;
+    padding: 2px;
+    /* Prendre toute la largeur restante du 1fr : width + display block */
+    width: 100%;
+    display: block;
+    margin: 0;
+}
+
+/* Links */
 a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
+/* Titles */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* PATIENT PAGE */
+/* Note tab */
+.note-content {
+    height: 60%;
+    border: inset grey 2px;
+    /*Les sauts de ligne ont uniquement lieu avec les caractères de saut de ligne et avec les éléments <br>
+      et on a des passages à la ligne automatiques.*/
+    white-space: pre-wrap;
 }
