@@ -39,6 +39,8 @@ export const userSlice = createSlice({
         clearUser: (state) => {
             localStorage.removeItem("authToken")
             localStorage.removeItem("role")
+            localStorage.removeItem("id")
+            localStorage.removeItem("username")
             state.isLoggedIn = false
             state.token = ""
             state.role = ""
