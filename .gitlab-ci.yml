@@ -1,3 +1,8 @@
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+
 image: node:20-alpine
 
 variables:
@@ -24,7 +29,7 @@ build-frontend-job:
   stage: build
   script:
     - npm ci
-    - npm install typescript --sav-dev
+    - npm install typescript --save-dev
     - npm run build
   artifacts:
     paths:
