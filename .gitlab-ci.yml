@@ -24,7 +24,6 @@ build-frontend-job:
   stage: build
   script:
     - npm ci
-    - npm install -g typescript
     - npm run build
   artifacts:
     paths:
