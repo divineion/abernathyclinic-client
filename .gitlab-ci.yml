@@ -23,6 +23,8 @@ install-frontend-job:
 build-frontend-job:
   stage: build
   script:
+    - npm ci
+    - npx tsc -b
     - npm run build
   artifacts:
     paths:
