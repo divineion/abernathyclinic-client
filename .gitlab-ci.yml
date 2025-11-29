@@ -6,7 +6,7 @@ workflow:
 image: node:20-alpine
 
 variables:
-  NODE_ENV: production
+  NODE_ENV: development
 
 stages:
   - install
@@ -29,7 +29,6 @@ build-frontend-job:
   stage: build
   script:
     - npm ci
-    - npm install -g typescript
     - npm run build
   artifacts:
     paths:
