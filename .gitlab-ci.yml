@@ -1,3 +1,8 @@
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+
 image: node:20-alpine
 
 variables:
@@ -41,5 +46,5 @@ image-frontend-job:
   before_script:
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
   script:
-    - docker build -t abernathy-client:$CI_COMMIT_REF_SLUG .
-    - docker push abernathy-client:$CI_COMMIT_REF_SLUG
+    - docker build -t divineion/abernathy-client:$CI_COMMIT_REF_SLUG .
+    - docker push divineion/abernathy-client:$CI_COMMIT_REF_SLUG
