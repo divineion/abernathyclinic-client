@@ -24,7 +24,7 @@ build-frontend-job:
   stage: build
   script:
     - npm ci
-    - npx tsc -b
+    - npm install typescript --sav-dev
     - npm run build
   artifacts:
     paths:
