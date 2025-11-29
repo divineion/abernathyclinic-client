@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_COMMIT_BRANCH == "feat/ci"'
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
 
 image: node:20-alpine
