@@ -1,12 +1,12 @@
 workflow:
   rules:
-    - if: '$CI_COMMIT_BRANCH == "feat/ci"'
+    - if: '$CI_COMMIT_BRANCH == "dev"'
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
 
 image: node:20-alpine
 
 variables:
-  NODE_ENV: production
+  NODE_ENV: development
 
 stages:
   - install
@@ -29,7 +29,6 @@ build-frontend-job:
   stage: build
   script:
     - npm ci
-    - npm install typescript --save-dev
     - npm run build
   artifacts:
     paths:
@@ -47,5 +46,5 @@ image-frontend-job:
   before_script:
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
   script:
-    - docker build -t abernathy-client:$CI_COMMIT_REF_SLUG .
-    - docker push abernathy-client:$CI_COMMIT_REF_SLUG
+    - docker build -t divineion/abernathyclinic-client:$CI_COMMIT_REF_SLUG .
+    - docker push divineion/abernathyclinic-client:$CI_COMMIT_REF_SLUG
