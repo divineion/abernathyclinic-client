@@ -1,0 +1,51 @@
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "feat/ci"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+
+image: node:20-alpine
+
+variables:
+  NODE_ENV: production
+
+stages:
+  - install
+  - build
+  - image
+
+cache:
+  paths:
+    - node_modules/
+  key: "$CI_COMMIT_REF_SLUG"
+
+# Installer les dépendances
+install-frontend-job:
+  stage: install
+  script:
+    - npm ci
+
+# Build de l'application
+build-frontend-job:
+  stage: build
+  script:
+    - npm ci
+    - npm install typescript --save-dev
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+    name: "frontend-dist-artifacts"
+
+# Build et push de l'image Docker
+image-frontend-job:
+  stage: image
+  image: docker:latest
+  services:
+    - docker:dind
+  dependencies:
+    - build-frontend-job
+  before_script:
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+  script:
+    - docker build -t abernathy-client:$CI_COMMIT_REF_SLUG .
+    - docker push abernathy-client:$CI_COMMIT_REF_SLUG
